@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, Image, Card } from "@chakra-ui/react";
+import { Text, Image, Card, Button, Center } from "@chakra-ui/react";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -39,38 +39,49 @@ const Projects = () => {
   // technologies
   // isPublished
 
-  return projects.map((projekt, idx) => {
-    const { title, description, image, liveLink, githubLink } = projekt;
+  if (projects.length > 0) {
     return (
-      <>
-        <Card.Root maxW="sm" overflow="hidden">
-          <Image
-            src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-            alt="Green double couch with wooden legs"
-          />
-          <Card.Body gap="2">
-            <Card.Title>Living room Sofa</Card.Title>
-            <Card.Description>
-              This sofa is perfect for modern tropical spaces, baroque inspired
-              spaces.
-            </Card.Description>
-            <Text
-              textStyle="2xl"
-              fontWeight="medium"
-              letterSpacing="tight"
-              mt="2"
+      <Grid templateColumns="repeat(3, 1fr)" gap="6">
+        {projects.map((projekt, idx) => {
+          const { title, image, liveLink, githubLink } = projekt;
+          const key = `${title}-${idx}`;
+          return (
+            <Card.Root
+              key={key}
+              className="project-card"
+              maxW="sm"
+              overflow="hidden"
+              rounded={"2xl"}
+              p={"4"}
             >
-              $450
-            </Text>
-          </Card.Body>
-          <Card.Footer gap="2">
-            <Button variant="solid">Buy now</Button>
-            <Button variant="ghost">Add to cart</Button>
-          </Card.Footer>
-        </Card.Root>
-      </>
+              <Image
+                className="card-img"
+                htmlWidth={"300px"}
+                aspectRatio={4 / 3}
+                rounded={"xl"}
+                src={image}
+                alt={key}
+              />
+              <Card.Body gap="2">
+                <Card.Title>{title}</Card.Title>
+              </Card.Body>
+              <Card.Footer gap="2">
+                <Button variant="solid" p={"2"} px="4" rounded={"xl"}>
+                  View
+                </Button>
+              </Card.Footer>
+            </Card.Root>
+          );
+        })}
+      </Grid>
     );
-  });
+  }
+
+  return (
+    <Center>
+      <Text textAlign={"center"}>No projects to showcase</Text>
+    </Center>
+  );
 };
 
 export default Projects;

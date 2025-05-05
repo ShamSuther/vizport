@@ -13,3 +13,18 @@
     font-weight: 400;
     font-style: normal;
 }
+
+.project-card {
+    cursor: pointer;
+    
+    .card-img {
+        transition: all 150ms cubic-bezier(0.075, 0.82, 0.165, 1);
+        filter: saturate(0);
+    }
+
+    &:hover {
+        .card-img {
+            filter: saturate();
+        }
+    }
+}
