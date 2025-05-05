@@ -4,6 +4,7 @@ const User = require("../config/models/User");
 const requireClerkAuth = require("../middleware/clerkAuth")
 const { clerkClient } = require("@clerk/express");
 
+// sync clerk auth to mongodb
 router.post("/sync", requireClerkAuth, async (req, resp) => {
     try {
         const { users } = clerkClient;

@@ -7,12 +7,15 @@ const express = require("express");
 const cors = require("cors");
 const { clerkMiddleware } = require("@clerk/express");
 const userRoutes = require("./routes/userRoutes");
+const projectRoutes = require("./routes/projectRoutes");
 
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 app.use(clerkMiddleware());
 app.use("/api/user", userRoutes);
+app.use("/api/projects", projectRoutes);
 
 // not found endpoint
 

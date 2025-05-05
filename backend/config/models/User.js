@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
     username: String,
     imageUrl: String,
     createdAt: { type: Date, default: Date.now }
-    
 });
 
 const userModel = mongoose.model("User",userSchema);
