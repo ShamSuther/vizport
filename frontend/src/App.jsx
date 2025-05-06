@@ -20,7 +20,7 @@ function App() {
         if (response.ok && response.status == 200) {
           result = await response.json();
           console.log(result);
-        }else if(response.status == 500){
+        } else if (response.status == 500) {
           result = await response.json();
           console.log(result);
         }

@@ -1,11 +1,12 @@
 import React from "react";
-import { Hero, Showcase } from "@/components";
+import { Hero, Showcase, Footer } from "@/components";
 
 const Home = () => {
   return (
     <>
       <Hero />
       <Showcase />
+      <Footer />
     </>
   );
 };

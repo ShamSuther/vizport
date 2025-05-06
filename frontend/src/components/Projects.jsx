@@ -1,28 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { Text, Image, Card, Button, Center } from "@chakra-ui/react";
+import {
+  Text,
+  Image,
+  Card,
+  Button,
+  Center,
+  Grid,
+  Flex,
+  Badge,
+} from "@chakra-ui/react";
+import { ArrowDownRight, Github } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        "http://localhost:5050/api/projects/public/all",
-        {
-          method: "GET",
-        }
-      );
+      try {
+        const response = await fetch(
+          "http://localhost:5050/api/projects/public/all",
+          {
+            method: "GET",
+          }
+        );
 
-      let result;
-      if (response.ok && response.status == 200) {
-        result = await response.json();
+        let result;
+        if (response.ok && response.status == 200) {
+          result = await response.json();
 
-        if (result && result.length > 0) {
-          setProjects(result);
-          console.log(result);
+          if (result && result.length > 0) {
+            setProjects(result);
+          }
+        } else {
+          result = await response.json();
         }
-      } else {
-        result = await response.json();
-        console.log(result);
+      } catch (error) {
+        console.error(error);
       }
     };
 
@@ -43,32 +58,44 @@ const Projects = () => {
     return (
       <Grid templateColumns="repeat(3, 1fr)" gap="6">
         {projects.map((projekt, idx) => {
-          const { title, image, liveLink, githubLink } = projekt;
+          const { _id, title, image, liveLink, githubLink } = projekt;
           const key = `${title}-${idx}`;
           return (
             <Card.Root
               key={key}
               className="project-card"
               maxW="sm"
+              maxH="sm"
               overflow="hidden"
-              rounded={"2xl"}
-              p={"4"}
+              border={"none"}
+              background={"transparent"}
             >
               <Image
                 className="card-img"
-                htmlWidth={"300px"}
                 aspectRatio={4 / 3}
                 rounded={"xl"}
                 src={image}
                 alt={key}
               />
-              <Card.Body gap="2">
-                <Card.Title>{title}</Card.Title>
-              </Card.Body>
               <Card.Footer gap="2">
-                <Button variant="solid" p={"2"} px="4" rounded={"xl"}>
-                  View
-                </Button>
+                <Flex
+                  className="card-text"
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                  w={"100%"}
+                >
+                  <Card.Title textStyle={"sm"}>{title}</Card.Title>
+                  <Button
+                    textStyle={"sm"}
+                    variant="plain"
+                    gap={".15rem"}
+                    p={0}
+                    onClick={() => navigate(`/project/${_id}`)}
+                  >
+                    VIEW
+                    <ArrowDownRight size={14} strokeWidth={2} />
+                  </Button>
+                </Flex>
               </Card.Footer>
             </Card.Root>
           );

@@ -4,5 +4,6 @@ import Navbar from "./Navbar";
 import ProjectEditor from "./ProjectEditor";
 import Projects from "./Projects";
 import Showcase from "./Showcase";
+import Footer from "./Footer";
 
-export { Hero, AuthForm, Navbar, ProjectEditor, Projects, Showcase };
+export { Hero, AuthForm, Navbar, ProjectEditor, Projects, Showcase, Footer };

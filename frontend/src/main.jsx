@@ -5,7 +5,7 @@ import "./App.css";
 import App from "./App.jsx";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { Provider } from "@/components/ui/provider";
-
+import { Toaster } from "./components/ui/toaster";
 
 // clerk PUBLISHABLE_KEY
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -19,6 +19,7 @@ createRoot(document.getElementById("root")).render(
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl={"/login"}>
       <Provider>
         <App />
+        <Toaster />
       </Provider>
     </ClerkProvider>
   </StrictMode>

@@ -5,14 +5,18 @@ import Projects from "./Projects";
 const Showcase = () => {
   return (
     <section>
-      <Container p={"4"} px={"8"}>
+      <Container p={"8"} px={"8"}>
         <Flex
           style={{
             direction: "row",
             justifyContent: "space-between",
             alignItems: "center",
           }}
+          mb={"4"}
         >
+          <Heading size="lg" color={"gray.300"}>
+            Project
+          </Heading>
           <Heading size="lg" color={"gray.300"}>
             Showcase
           </Heading>
