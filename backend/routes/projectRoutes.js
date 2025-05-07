@@ -100,7 +100,7 @@ router.put("/:id", requireClerkAuth, async (req, res) => {
 // Delete a project
 router.delete("/:id", requireClerkAuth, async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const project = await Project.findById(req.params.id).populate({ path: "userId", select: "-__v" }).select(excluded).exec();
         if (!project) return res.status(404).json({ message: "Project not found" });
 
         if (project.userId !== req.auth.userId)
@@ -117,18 +117,15 @@ router.delete("/:id", requireClerkAuth, async (req, res) => {
 router.get("/public/all", async (req, res) => {
     try {
         const excluded = "-__v -description -technologies";
-        const projects = await Project.find({ isPublished: true }).populate({path: "userId",select: "-__v"}).select(excluded).exec();
+        const projects = await Project.find({ isPublished: true }).populate({ path: "userId", select: "-__v" }).select(excluded).exec();
 
         if (projects && projects.length > 0) {
-            projects.forEach((project) => {
-                console.log(project);
-            });
             return res.json(projects);
         }
         return res.status(404).json({ message: "No projects found!" });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ message: err.message ||"Failed to fetch public projects" });
+        res.status(500).json({ message: err.message || "Failed to fetch public projects" });
     }
 });
 

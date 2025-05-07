@@ -9,12 +9,13 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { ArrowRight } from "lucide-react";
+import HeroBtn from "./HeroBtn";
 
 const Hero = () => {
   return (
     <>
       <Center minHeight={"80dvh"}>
-        <Container p={"4"} px={"8"}>
+        <Container>
           <Box>
             <Flex direction={"column"} alignItems={"center"} gap={"2"}>
               <Text
@@ -35,21 +36,7 @@ const Hero = () => {
               >
                 Vizport
               </Heading>
-              <Button
-                p={"4"}
-                rounded="xl"
-                variant={"outline"}
-                borderWidth={"2px"}
-                colorPalette={"gray"}
-                size={{ base: "sm", md: "md" }}
-                fontSize={{ base: "sm", md: "md" }}
-                color={{ base: "gray.900", _hover: "gray.300" }}
-                bg={{ base: "gray.300", _hover: "gray.900" }}
-                borderColor={{ base: "gray.300", _hover: "gray.300" }}
-                transition="all 150ms ease-in-out"
-              >
-                Get started now <ArrowRight />
-              </Button>
+              <HeroBtn content={"Get started now"} icon={<ArrowRight />} />
             </Flex>
           </Box>
         </Container>

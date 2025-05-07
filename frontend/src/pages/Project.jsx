@@ -10,14 +10,18 @@ import {
   Stack,
   Badge,
   Link,
+  Center,
+  Box,
 } from "@chakra-ui/react";
-import { Footer } from "@/components";
-import { Github, Globe, ArrowUpRight } from "lucide-react";
+import { Footer, Navbar } from "@/components";
+import { Github, House, ArrowUpRight } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const Project = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +61,7 @@ const Project = () => {
   if (project) {
     return (
       <>
+        <Navbar />
         <Container p={"8"} px={"8"} flex={1} minHeight={"90dvh"}>
           <Flex direction={"column"} gap={{ base: 2, md: 4 }}>
             <Heading size={{ base: "lg", md: "xl" }}>{project.title}</Heading>
@@ -64,7 +69,7 @@ const Project = () => {
               <Link
                 textStyle={{ base: "sm", md: "md" }}
                 variant="underline"
-                href={project.liveLink}
+                href={project.githubLink}
                 color={{ _hover: "orange.500" }}
                 transition={"all 150ms ease-in"}
               >
@@ -115,6 +120,33 @@ const Project = () => {
         </Container>
         <Footer />
       </>
+    );
+  } else {
+    return (
+      <Center height={"100dvh"}>
+        <Container p={"4"} px={"8"}>
+          <Flex direction={"column"} alignItems={"center"} gap={2}>
+            <Heading
+              textStyle={{ base: "4xl", md: "5xl" }}
+              fontWeight={"medium"}
+              transition="all 150ms ease-in-out"
+            >
+              "{id}"
+            </Heading>
+            <Box color={"gray.200"} textAlign={"center"}>
+              <Text>{error ? error.message : "PROJECT NOT FOUND"}</Text>
+            </Box>
+            <Link
+              color={{ _hover: "orange.500" }}
+              p={2}
+              onClick={() => navigate("/")}
+              transition={"all"}
+            >
+              <House />
+            </Link>
+          </Flex>
+        </Container>
+      </Center>
     );
   }
 };

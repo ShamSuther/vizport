@@ -12,6 +12,7 @@ const Footer = () => {
           textStyle={{ base: "sm", md: "md" }}
           alignItems={"center"}
         >
+          <span style={{ fontWeight: 500 }}>Vizport</span>
           <Copyright size={"1rem"} strokeWidth={2} />{" "}
           <span style={{ fontStyle: "italic", fontWeight: 500 }}>
             {new Date().getFullYear()}
