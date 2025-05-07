@@ -6,7 +6,12 @@ const Footer = () => {
   return (
     <Box p={6} px={8}>
       <Center>
-        <Flex direction="row" gap={"1"} textStyle={"md"} alignItems={"center"}>
+        <Flex
+          direction="row"
+          gap={"1"}
+          textStyle={{ base: "sm", md: "md" }}
+          alignItems={"center"}
+        >
           <Copyright size={"1rem"} strokeWidth={2} />{" "}
           <span style={{ fontStyle: "italic", fontWeight: 500 }}>
             {new Date().getFullYear()}

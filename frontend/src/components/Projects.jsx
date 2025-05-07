@@ -7,14 +7,17 @@ import {
   Center,
   Grid,
   Flex,
-  Badge,
+  Avatar,
+  Box,
 } from "@chakra-ui/react";
 import { ArrowDownRight, Github } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useClerk } from "@clerk/clerk-react";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
+  const { user } = useClerk();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +48,11 @@ const Projects = () => {
     return () => {};
   }, []);
 
+  useEffect(() => {
+    console.log(user);
+    return () => {};
+  }, [user]);
+
   // userId
   // title
   // description
@@ -56,7 +64,10 @@ const Projects = () => {
 
   if (projects.length > 0) {
     return (
-      <Grid templateColumns="repeat(3, 1fr)" gap="6">
+      <Grid
+        templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(2, 1fr)" }}
+        gap={{ base: 3, md: 6 }}
+      >
         {projects.map((projekt, idx) => {
           const { _id, title, image, liveLink, githubLink } = projekt;
           const key = `${title}-${idx}`;
@@ -70,13 +81,32 @@ const Projects = () => {
               border={"none"}
               background={"transparent"}
             >
-              <Image
-                className="card-img"
-                aspectRatio={4 / 3}
-                rounded={"xl"}
-                src={image}
-                alt={key}
-              />
+              <Box position={"relative"}>
+                <Image
+                  className="card-img"
+                  width={400}
+                  height={{ base: 120, md: 300 }}
+                  aspectRatio={4 / 3}
+                  rounded={{ base: "lg", md: "3xl" }}
+                  src={image}
+                  alt={key}
+                />
+                <Card.Body
+                  position={"absolute"}
+                  visibility={{ base: "hidden", md: "visible" }}
+                  inset={"auto .5rem .5rem auto"}
+                >
+                  <Avatar.Root
+                    shape={"full"}
+                    size={{ base: "md", md: "lg" }}
+                    cursor={"pointer"}
+                    shadow={"xs"}
+                  >
+                    <Avatar.Fallback name={projekt.userId.username} />
+                    <Avatar.Image src={projekt.userId.imageUrl} />
+                  </Avatar.Root>
+                </Card.Body>
+              </Box>
               <Card.Footer gap="2">
                 <Flex
                   className="card-text"
@@ -84,9 +114,12 @@ const Projects = () => {
                   alignItems={"center"}
                   w={"100%"}
                 >
-                  <Card.Title textStyle={"sm"}>{title}</Card.Title>
+                  <Card.Title textStyle={{ base: "xs", md: "sm" }} truncate>
+                    {title}
+                  </Card.Title>
                   <Button
-                    textStyle={"sm"}
+                    textStyle={{ base: "xs", md: "sm" }}
+                    color={{ _hover: "orange.500" }}
                     variant="plain"
                     gap={".15rem"}
                     p={0}

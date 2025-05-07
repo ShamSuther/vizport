@@ -117,14 +117,18 @@ router.delete("/:id", requireClerkAuth, async (req, res) => {
 router.get("/public/all", async (req, res) => {
     try {
         const excluded = "-__v -description -technologies";
-        const projects = await Project.find({ isPublished: true }).select(excluded);
+        const projects = await Project.find({ isPublished: true }).populate({path: "userId",select: "-__v"}).select(excluded).exec();
 
         if (projects && projects.length > 0) {
+            projects.forEach((project) => {
+                console.log(project);
+            });
             return res.json(projects);
         }
         return res.status(404).json({ message: "No projects found!" });
     } catch (err) {
-        res.status(500).json({ message: "Failed to fetch public projects" });
+        console.log(err);
+        res.status(500).json({ message: err.message ||"Failed to fetch public projects" });
     }
 });
 

@@ -5,7 +5,7 @@ import Projects from "./Projects";
 const Showcase = () => {
   return (
     <section>
-      <Container p={"8"} px={"8"}>
+      <Container p={{ base: "4", md: "8" }}>
         <Flex
           style={{
             direction: "row",
