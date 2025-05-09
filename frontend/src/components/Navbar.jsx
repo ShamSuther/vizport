@@ -19,6 +19,11 @@ const Navbar = () => {
       show: user ? true : false,
     },
     {
+      text: "CREATE",
+      action: () => navigate("/editor"),
+      show: user ? true : false,
+    },
+    {
       text: "PROFILE",
       action: () => openUserProfile(),
       show: user ? true : false,
@@ -26,7 +31,7 @@ const Navbar = () => {
     {
       text: "LOGIN",
       action: () => openSignIn(),
-      show: true,
+      show: user ? false : true,
     },
     {
       text: "LOGOUT",

@@ -12,6 +12,7 @@ import {
   Link,
   Center,
   Box,
+  Spinner,
 } from "@chakra-ui/react";
 import { Footer, Navbar } from "@/components";
 import { Github, House, ArrowUpRight } from "lucide-react";
@@ -21,6 +22,7 @@ const Project = () => {
   const { id } = useParams();
   const [project, setProject] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,15 +41,19 @@ const Project = () => {
           setProject(result);
         } else {
           result = await response.json();
-          console.log(result);
+          setProject(null);
+          setError(new Error(result?.message || "Project not found"));
         }
       } catch (error) {
         setError(error);
+        setProject(null);
         toaster.create({
           title: "Error",
           description: error.message,
           type: "error",
         });
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -58,9 +64,20 @@ const Project = () => {
     console.log(project);
   }, [project]);
 
-  if (project) {
+  if (loading) {
+    return (
+      <Center height={"100dvh"}>
+        <Text>
+          <Spinner color={"orange.500"} size={{ base: "smd", md: "md" }} />
+        </Text>
+      </Center>
+    );
+  }
+
+  if (project != null) {
     return (
       <>
+        <title>Project: Vizport;</title>
         <Navbar />
         <Container p={"8"} px={"8"} flex={1} minHeight={"90dvh"}>
           <Flex direction={"column"} gap={{ base: 2, md: 4 }}>
@@ -121,34 +138,37 @@ const Project = () => {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <Center height={"100dvh"}>
-        <Container p={"4"} px={"8"}>
-          <Flex direction={"column"} alignItems={"center"} gap={2}>
-            <Heading
-              textStyle={{ base: "4xl", md: "5xl" }}
-              fontWeight={"medium"}
-              transition="all 150ms ease-in-out"
-            >
-              "{id}"
-            </Heading>
-            <Box color={"gray.200"} textAlign={"center"}>
-              <Text>{error ? error.message : "PROJECT NOT FOUND"}</Text>
-            </Box>
-            <Link
-              color={{ _hover: "orange.500" }}
-              p={2}
-              onClick={() => navigate("/")}
-              transition={"all"}
-            >
-              <House />
-            </Link>
-          </Flex>
-        </Container>
-      </Center>
-    );
   }
+  return (
+    <Center height={"100dvh"}>
+      <Container p={"4"} px={"8"}>
+        <Flex direction={"column"} alignItems={"center"} gap={2}>
+          <Heading
+            textStyle={{ base: "md", sm: "xl", md: "2xl" }}
+            fontWeight={"medium"}
+            transition="all 150ms ease-in-out"
+          >
+            "{id}"
+          </Heading>
+          <Box
+            color={"gray.200"}
+            textStyle={{ base: "sm", sm: "md" }}
+            textAlign={"center"}
+          >
+            <Text>{error ? error.message : "PROJECT NOT FOUND"}</Text>
+          </Box>
+          <Link
+            color={{ _hover: "orange.500" }}
+            p={2}
+            onClick={() => navigate("/")}
+            transition={"all"}
+          >
+            <House />
+          </Link>
+        </Flex>
+      </Container>
+    </Center>
+  );
 };
 
 export default Project;
