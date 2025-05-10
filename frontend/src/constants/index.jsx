@@ -25,12 +25,12 @@ export const inputs = [
     placeholder: "github.com/username/repo",
     type: "url",
   },
-  // {
-  //   name: "technologies",
-  //   label: "Technologies Used",
-  //   placeholder: "React, Node.js, MongoDB",
-  //   type: "select",
-  // },
+  {
+    name: "technologies",
+    label: "Technologies Used",
+    placeholder: "React, Node.js, MongoDB",
+    type: "select",
+  },
   {
     name: "images",
     label: "Image URLs",
@@ -51,7 +51,7 @@ export const initials = {
   images: [],
   liveLink: "",
   githubLink: "",
-  // technologies: [],
+  technologies: [],
   isPublished: false,
 };
 

@@ -68,7 +68,14 @@ export default function FormInput({ id, form, fieldName, fieldConfig, addon }) {
         ref={field.ref}
         rounded={"md"}
         onChange={field.onChange}
-        onBlur={field.onBlur}
+        onBlur={(e) => {
+          let value = e.target.value;
+          if (type === "url" && value && !/^https?:\/\//i.test(value)) {
+            value = `https://${value}`;
+            field.onChange(value);
+          }
+          field.onBlur();
+        }}
         value={field.value}
         name={field.name}
         placeholder={placeholder}

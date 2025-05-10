@@ -9,6 +9,8 @@ import FormTextArea from "@/components/FormTextarea";
 import FormCheckbox from "@/components/FormCheckbox";
 import { FormDropzone } from "@/components/FormDropdone";
 import FormSelect from "@/components/FormSelect";
+import { toaster } from "@/components/ui/toaster";
+import { Footer, Navbar } from "@/components";
 
 const Editor = () => {
   const form = useForm({
@@ -20,10 +22,26 @@ const Editor = () => {
   const { errors } = formState;
 
   useEffect(() => {
-    if (errors) {
-      console.log(errors);
+    const hasErrors = Object.keys(errors).length > 0;
+
+    if (hasErrors) {
+      setTimeout(() => {
+        for (const key in errors) {
+          const title = key.charAt(0).toUpperCase() + key.slice(1);
+          toaster.create({
+            duration: 2500,
+            title: title || "Error",
+            description: errors[key]?.message,
+            type: "info",
+          });
+        }
+      }, 0);
+      const timer = setTimeout(() => {
+        clearErrors();
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [errors]);
+  }, [clearErrors, errors]);
 
   const onSubmit = async (values) => {
     console.log(values);
@@ -35,7 +53,7 @@ const Editor = () => {
 
   return (
     <div>
-      Editor
+      <Navbar />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <VStack gap={4}>
           {inputs.map((field, idx) => {
@@ -116,6 +134,7 @@ const Editor = () => {
         </VStack>
         <Button type="submit">Submit</Button>
       </form>
+      <Footer />
     </div>
   );
 };
