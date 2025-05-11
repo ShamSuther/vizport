@@ -1,9 +1,13 @@
+import React, { useMemo } from "react";
 import { Field, Select, createListCollection, Portal } from "@chakra-ui/react";
 import { useController } from "react-hook-form";
 import { allTechnologies } from "@/constants";
 
 export default function FormSelect({ id, form, fieldName, fieldConfig }) {
-  const frameworks = createListCollection({ items: allTechnologies });
+  const frameworks = useMemo(
+    () => createListCollection({ items: allTechnologies }),
+    []
+  );
 
   const {
     field,
@@ -16,29 +20,15 @@ export default function FormSelect({ id, form, fieldName, fieldConfig }) {
   const { name, label, placeholder, type } = fieldConfig;
 
   return (
-    <Field.Root key={id} invalid={error ? true : false}>
-      {/* <Field.Label>{label}</Field.Label>
-      <Input
-        py={1}
-        px={3}
-        ref={field.ref}
-        rounded={"md"}
-        onChange={field.onChange}
-        onBlur={field.onBlur}
-        value={field.value}
-        name={field.name}
-        placeholder={placeholder}
-        transition={"all 150ms ease-in-out"}
-        type={type}
-      /> */}
+    <Field.Root key={id} invalid={!!error}>
       <Select.Root
-      search
         value={field.value}
-        onValueChange={(e) => field.onChange(e.value)}
+        onValueChange={({ value }) => {
+          field.onChange(value);
+        }}
         multiple
         collection={frameworks}
         size="sm"
-        width="320px"
       >
         <Select.HiddenSelect />
         <Select.Label>{label}</Select.Label>

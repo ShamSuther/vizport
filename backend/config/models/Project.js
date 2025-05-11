@@ -17,8 +17,9 @@ const projectSchema = new mongoose.Schema(
             required: true,
             maxlength: 2000,
         },
-        image: {
-            type: String, // image URL (e.g., Cloudinary)
+        images: {
+            type: [String], // image URL (e.g., Cloudinary)
+            default: [],
             required: true,
         },
         liveLink: {

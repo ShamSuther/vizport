@@ -2,7 +2,7 @@ import { Upload } from "lucide-react";
 import { useController } from "react-hook-form";
 import { Field, Box, FileUpload, Icon } from "@chakra-ui/react";
 
-export const FormDropzone = ({ id, form, fieldName, fieldConfig }) => {
+export default function FormDropzone({ id, form, fieldName, fieldConfig }){
   const {
     field,
     fieldState: { error },
@@ -54,4 +54,4 @@ export const FormDropzone = ({ id, form, fieldName, fieldConfig }) => {
       <Field.ErrorText>{error?.message}</Field.ErrorText>
     </Field.Root>
   );
-};
+}

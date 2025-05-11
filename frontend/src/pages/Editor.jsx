@@ -1,138 +1,136 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { initials, inputs } from "@/constants";
 import { Button, VStack } from "@chakra-ui/react";
+import { inputs, initials } from "@/constants";
 import { formSchema } from "@/schemas/formSchema";
-import FormInput from "@/components/FormInput";
-import FormTextArea from "@/components/FormTextarea";
-import FormCheckbox from "@/components/FormCheckbox";
-import { FormDropzone } from "@/components/FormDropdone";
-import FormSelect from "@/components/FormSelect";
+import {
+  FormInput,
+  FormTextArea,
+  FormCheckbox,
+  FormDropzone,
+  FormSelect,
+} from "@/components";
 import { toaster } from "@/components/ui/toaster";
 import { Footer, Navbar } from "@/components";
+import { useAuth } from "@clerk/clerk-react";
 
 const Editor = () => {
+  const { getToken } = useAuth();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initials,
   });
 
-  const { formState, clearErrors } = form;
-  const { errors } = formState;
+  const {
+    formState: { errors },
+    clearErrors,
+    handleSubmit,
+  } = form;
 
   useEffect(() => {
-    const hasErrors = Object.keys(errors).length > 0;
+    if (!Object.keys(errors).length) return;
 
-    if (hasErrors) {
-      setTimeout(() => {
-        for (const key in errors) {
-          const title = key.charAt(0).toUpperCase() + key.slice(1);
-          toaster.create({
-            duration: 2500,
-            title: title || "Error",
-            description: errors[key]?.message,
-            type: "info",
-          });
-        }
-      }, 0);
-      const timer = setTimeout(() => {
-        clearErrors();
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [clearErrors, errors]);
+    const toastErrors = () => {
+      Object.entries(errors).forEach(([key, value]) => {
+        toaster.create({
+          duration: 2500,
+          title: key.charAt(0).toUpperCase() + key.slice(1),
+          description: value?.message,
+          type: "info",
+        });
+      });
+    };
+
+    const microtask = setTimeout(toastErrors, 0);
+    const clearTimer = setTimeout(clearErrors, 3000);
+
+    return () => {
+      clearTimeout(microtask);
+      clearTimeout(clearTimer);
+    };
+  }, [errors, clearErrors]);
+
+  useEffect(() => {
+    return () => {};
+  }, []);
 
   const onSubmit = async (values) => {
-    console.log(values);
-    // try {
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    const formData = new FormData();
+
+    // Append basic fields
+    formData.append("title", values.title);
+    formData.append("description", values.description);
+    formData.append("liveLink", values.liveLink);
+    formData.append("githubLink", values.githubLink);
+    formData.append("isPublished", values.isPublished);
+
+    // Append technologies as JSON string or individual items
+    values.technologies.forEach((tech) => {
+      formData.append("technologies", tech);
+    });
+
+    // Append image files
+    values.images.forEach((image, _) => {
+      formData.append("images", image);
+    });
+
+    try {
+      const token = await getToken();
+      const response = await fetch("http://localhost:5050/api/projects/", {
+        method: "post",
+        body: formData,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      let result;
+      if (response.ok && response.status == 200) {
+        result = await response.json();
+        console.log(result);
+      } else {
+        result = await response.json(); // 🔥 throws error if response is HTML
+        console.log(result);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderField = (field, idx) => {
+    const key = `${field.name}-${idx}`;
+    const sharedProps = {
+      id: idx,
+      form,
+      fieldName: field.name,
+      fieldConfig: field,
+    };
+
+    switch (field.type) {
+      case "attachments":
+        return <FormDropzone key={key} {...sharedProps} />;
+      case "textarea":
+        return <FormTextArea key={key} {...sharedProps} />;
+      case "checkbox":
+        return <FormCheckbox key={key} {...sharedProps} />;
+      case "select":
+        return <FormSelect key={key} {...sharedProps} />;
+      case "url":
+        return <FormInput key={key} addon="https://" {...sharedProps} />;
+      default:
+        return <FormInput key={key} {...sharedProps} />;
+    }
   };
 
   return (
     <div>
       <Navbar />
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <VStack gap={4}>
-          {inputs.map((field, idx) => {
-            const key = `${field.name}-${idx}`;
-            const { name, type } = field;
-
-            if (type === "attachments") {
-              return (
-                <FormDropzone
-                  id={idx}
-                  key={key}
-                  form={form}
-                  fieldName={name}
-                  fieldConfig={field}
-                />
-              );
-            }
-
-            if (type === "textarea") {
-              return (
-                <FormTextArea
-                  id={idx}
-                  key={key}
-                  form={form}
-                  fieldName={name}
-                  fieldConfig={field}
-                />
-              );
-            }
-
-            if (type === "checkbox") {
-              return (
-                <FormCheckbox
-                  id={idx}
-                  key={key}
-                  form={form}
-                  fieldName={name}
-                  fieldConfig={field}
-                />
-              );
-            }
-
-            if (type === "select") {
-              return (
-                <FormSelect
-                  id={idx}
-                  key={key}
-                  form={form}
-                  fieldName={name}
-                  fieldConfig={field}
-                />
-              );
-            }
-
-            if (type === "url") {
-              return (
-                <FormInput
-                  id={idx}
-                  key={key}
-                  form={form}
-                  fieldName={name}
-                  fieldConfig={field}
-                  addon={"https://"}
-                />
-              );
-            }
-
-            return (
-              <FormInput
-                id={idx}
-                key={key}
-                form={form}
-                fieldName={name}
-                fieldConfig={field}
-              />
-            );
-          })}
+          {inputs.map((field, idx) => renderField(field, idx))}
         </VStack>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" mt={4}>
+          Submit
+        </Button>
       </form>
       <Footer />
     </div>

@@ -56,7 +56,7 @@ const Projects = () => {
   // userId
   // title
   // description
-  // image
+  // images
   // liveLink
   // githubLink
   // technologies
@@ -69,7 +69,7 @@ const Projects = () => {
         gap={{ base: 3, md: 6 }}
       >
         {projects.map((projekt, idx) => {
-          const { _id, title, image, liveLink, githubLink } = projekt;
+          const { _id, title, images, liveLink, githubLink } = projekt;
           const key = `${title}-${idx}`;
           return (
             <Card.Root
@@ -88,7 +88,7 @@ const Projects = () => {
                   height={{ base: 120, md: 300 }}
                   aspectRatio={4 / 3}
                   rounded={{ base: "lg", md: "3xl" }}
-                  src={image}
+                  src={images[0]}
                   alt={key}
                 />
                 <Card.Body

@@ -1,34 +1,56 @@
 const express = require("express");
 const router = express.Router();
 const Project = require("../config/models/Project");
-const requireClerkAuth = require("../middleware/clerkAuth")
+const requireClerkAuth = require("../middleware/clerkAuth");
+const upload = require("../middleware/multer");
+const { uploadToCloudinary } = require("../utils")
+const User = require("../config/models/User");
 
 // Create a new project
-router.post("/", async (req, resp) => {
+router.post("/", requireClerkAuth, upload.array("images", 5), async (req, resp) => {
     try {
         const {
             title,
             description,
-            image,
             liveLink,
             githubLink,
-            technologies,
             isPublished,
+            technologies,
         } = req.body;
+
+        const userId = req.auth.userId;
+
+        try {
+            const response = await User.findOne({ userId });
+            if (response.ok && response.status === 200) {
+                const result = await response.json();
+                console.log(result);
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
         // Basic validation
         if (!title || !description) {
             return resp.status(400).json({ message: "Title and description are required" });
         }
 
-        // const userId = req.params.id;
-        const userId = req.auth.userId;
+        if (!req.files || req.files.length === 0) {
+            return resp.status(400).json({ message: 'No files were uploaded.' });
+        }
+
+        const uploadPromises = req.files.map((file) => (
+            uploadToCloudinary(file.buffer, "vizport/uploads")
+        ));
+
+        const uploadedImages = await Promise.all(uploadPromises);
+        const imageUrls = uploadedImages.map((img) => (img.url));
 
         const project = new Project({
             userId,
             title,
             description,
-            image,
+            images: imageUrls,
             liveLink,
             githubLink,
             technologies,
@@ -46,20 +68,7 @@ router.post("/", async (req, resp) => {
 
 // get users projects
 router.get("/", async (req, resp) => {
-    try {
-        const userId = req.auth.userId;
-        // const userId = req.params.id;
-
-        const projects = await Project.find({ userId });
-
-        if (projects && projects.length > 0) {
-            resp.json(projects);
-        }
-
-        resp.status(404).json({ success: false, message: "No projects found" });
-    } catch (err) {
-        resp.status(500).json({ message: "Failed to fetch projects" });
-    }
+    resp.json({ message: "running!!!!!!!!!!!!!!!" })
 });
 
 // Get a single project

@@ -17,6 +17,11 @@ import {
 import { Footer, Navbar } from "@/components";
 import { Github, House, ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/navigation";
 
 const Project = () => {
   const { id } = useParams();
@@ -102,12 +107,33 @@ const Project = () => {
                 <ArrowUpRight size={14} strokeWidth={2} /> Preview{" "}
               </Link>
             </Stack>
-            <Image
-              width={{ base: "100%", md: "3/4", lg: "1/2" }}
-              src={project.image}
-              alt={project.title}
-              aspectRatio={4 / 3}
-            />
+
+            {project.images && project.images.length > 1 ? (
+              <Swiper
+                navigation={true}
+                modules={[Navigation]}
+                className="mySwiper"
+              >
+                {project.images.map((url, idx) => (
+                  <SwiperSlide key={idx}>
+                    <Image
+                      width={{ base: "100%", md: "3/4", lg: "1/2" }}
+                      src={url}
+                      alt={project.title}
+                      aspectRatio={4 / 3}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <Image
+                width={{ base: "100%", md: "3/4", lg: "1/2" }}
+                src={project.images[0]}
+                alt={project.title}
+                aspectRatio={4 / 3}
+              />
+            )}
+
             <Text
               textStyle={{ base: "sm", md: "md" }}
               maxWidth={{ base: "100%", md: "3/4", lg: "8/12" }}
