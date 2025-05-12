@@ -23,9 +23,13 @@ import { toaster } from "@/components/ui/toaster";
 import { Footer, Navbar } from "@/components";
 import { useAuth } from "@clerk/clerk-react";
 import Btn from "@/components/Btn";
+import { Pencil } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const Editor = () => {
   const { getToken } = useAuth();
+  const navigate = useNavigate();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: initials,
@@ -70,38 +74,46 @@ const Editor = () => {
     // Append basic fields
     formData.append("title", values.title);
     formData.append("description", values.description);
-    formData.append("liveLink", values.liveLink);
-    formData.append("githubLink", values.githubLink);
+    formData.append("liveLink", values.liveLink || "");
+    formData.append("githubLink", values.githubLink || "");
     formData.append("isPublished", values.isPublished);
 
-    // Append technologies as JSON string or individual items
-    values.technologies.forEach((tech) => {
+    // Append technologies
+    values.technologies?.forEach((tech) => {
       formData.append("technologies", tech);
     });
 
     // Append image files
-    values.images.forEach((image, _) => {
+    values.images?.forEach((image) => {
       formData.append("images", image);
     });
 
-    try {
-      const token = await getToken();
-      const response = await fetch("http://localhost:5050/api/projects/", {
-        method: "post",
-        body: formData,
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const token = await getToken();
+    const response = await fetch("http://localhost:5050/api/projects/", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      let result;
-      if (response.ok && response.status == 200) {
-        result = await response.json();
-        console.log(result);
-      } else {
-        result = await response.json(); // 🔥 throws error if response is HTML
-        console.log(result);
-      }
-    } catch (error) {
-      console.error(error);
+    const result = await response.json().catch(() => ({
+      error: "Invalid JSON response from server",
+    }));
+
+    if (response.ok) {
+      console.log("Project created:", result);
+      toaster.create({
+        title: response.message || "Project created!",
+        type: "success",
+      });
+      navigate("/dashboard");
+    } else {
+      console.error("Failed to create project:", result);
+      toaster.create({
+        title: result.message || "Project not created!",
+        type: "error",
+      });
     }
   };
 
@@ -138,10 +150,13 @@ const Editor = () => {
           height={"100%"}
           direction={{ base: "column", md: "row" }}
           justifyContent={"space-evenly"}
+          alignItems={"flex-start"}
         >
           <Flex
             p={4}
+            maxWidth={{ base: "none", md: "30%" }}
             height={"auto"}
+            direction={"column"}
             justifyContent="center"
             textAlign={{ base: "center", md: "left" }}
             mt={12}
@@ -150,9 +165,21 @@ const Editor = () => {
               size={{ base: "2xl", md: "4xl" }}
               wordBreak="break-word"
               maxW="sm"
+              mb={{ base: 2 }}
             >
-              Create new project
+              Create new{" "}
+              <span style={{ position: "relative" }}>
+                project
+                <Pencil
+                  style={{ position: "absolute", inset: "-0.7rem auto auto 0" }}
+                />
+              </span>
             </Heading>
+            <Text color={"gray.300"} textStyle={{ base: "sm", md: "md" }}>
+              Ready to showcase your work? Enter your project’s info — a great
+              title, a solid description, some cool screenshots, and your links.
+              Let the world see what you’ve built!
+            </Text>
           </Flex>
 
           {/* Form Section */}
@@ -173,7 +200,7 @@ const Editor = () => {
                 </VStack>
               </Card.Body>
               <Card.Footer mt={4}>
-                <Btn content="Submit" type="submit" />
+                <Btn content="Create" type="submit" />
               </Card.Footer>
             </form>
           </Card.Root>

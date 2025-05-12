@@ -5,7 +5,7 @@ import {
   Route,
   useLocation,
 } from "react-router";
-import { Home, Editor, Error, Project, Dashboard } from "./pages";
+import { Home, Editor, Error, Project, Dashboard, SignUpPage } from "./pages";
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 import { useAuth } from "@clerk/clerk-react";
 import { AnimatePresence } from "motion/react";
@@ -16,7 +16,14 @@ const AnimateRoutes = () => {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+        <Route
+          path="/"
+          element={
+            <PageWrapper>
+              <Home />
+            </PageWrapper>
+          }
+        />
         <Route
           path="/dashboard"
           element={
@@ -55,8 +62,14 @@ const AnimateRoutes = () => {
             </PageWrapper>
           }
         />
-        {/* <Route path="/signup" element={<Register />} />
-          <Route path="/login" element={<Register />} /> */}
+        <Route
+          path="/sign_up"
+          element={
+            <PageWrapper>
+              <SignUpPage />
+            </PageWrapper>
+          }
+        />
         <Route
           path="*"
           element={
@@ -69,7 +82,6 @@ const AnimateRoutes = () => {
     </AnimatePresence>
   );
 };
-
 
 // main
 function App() {

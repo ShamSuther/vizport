@@ -20,15 +20,15 @@ router.post("/", requireClerkAuth, upload.array("images", 5), async (req, resp) 
 
         const userId = req.auth.userId;
 
-        try {
-            const response = await User.findOne({ userId });
-            if (response.ok && response.status === 200) {
-                const result = await response.json();
-                console.log(result);
-            }
-        } catch (error) {
-            console.log(error);
+        console.log(userId);
+
+        // Ensure user exists in DB
+        const user = await User.findOne({ clerkId: userId });
+        if (!user) {
+            return resp.status(404).json({ message: "User not found" });
         }
+
+        console.log(user);
 
         // Basic validation
         if (!title || !description) {
@@ -36,25 +36,31 @@ router.post("/", requireClerkAuth, upload.array("images", 5), async (req, resp) 
         }
 
         if (!req.files || req.files.length === 0) {
-            return resp.status(400).json({ message: 'No files were uploaded.' });
+            return resp.status(400).json({ message: "No files were uploaded." });
         }
 
-        const uploadPromises = req.files.map((file) => (
+        // Upload images to Cloudinary
+        const uploadPromises = req.files.map((file) =>
             uploadToCloudinary(file.buffer, "vizport/uploads")
-        ));
+        );
 
         const uploadedImages = await Promise.all(uploadPromises);
-        const imageUrls = uploadedImages.map((img) => (img.url));
+        const imageUrls = uploadedImages.map((img) => img.url);
+
+        // Ensure technologies is always an array
+        const techArray = Array.isArray(technologies)
+            ? technologies
+            : technologies?.split(",").map((tech) => tech.trim()) || [];
 
         const project = new Project({
-            userId,
+            userId: user._id,
             title,
             description,
             images: imageUrls,
             liveLink,
             githubLink,
-            technologies,
-            isPublished,
+            technologies: techArray,
+            isPublished: isPublished === "true" || isPublished === true,
         });
 
         await project.save();
@@ -65,6 +71,7 @@ router.post("/", requireClerkAuth, upload.array("images", 5), async (req, resp) 
         return resp.status(500).json({ message: "Internal server error" });
     }
 });
+
 
 // get users projects
 router.get("/", async (req, resp) => {

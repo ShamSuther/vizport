@@ -11,8 +11,13 @@ import {
 } from "@chakra-ui/react";
 import { ArrowRight } from "lucide-react";
 import Btn from "./Btn";
+import { useClerk } from "@clerk/clerk-react";
+import { useNavigate } from "react-router";
 
 const Hero = () => {
+  const { openSignUp,openSignIn, isSignedIn } = useClerk();
+  const navigate = useNavigate();
+
   return (
     <>
       <Center className="hero-section" minHeight={"80dvh"}>
@@ -41,6 +46,15 @@ const Hero = () => {
                 content={"Get started now"}
                 type={"button"}
                 icon={<ArrowRight />}
+                onClick={() => {
+                  if (isSignedIn) {
+                    navigate("/editor");
+                  } else {
+                    // navigate("/sign_up");
+                    // openSignUp({ fallbackRedirectUrl: "/" });
+                    openSignIn({ fallbackRedirectUrl: "/" });
+                  }
+                }}
               />
             </Flex>
           </Box>

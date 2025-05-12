@@ -87,7 +87,7 @@ const Project = () => {
         <Container p={8} px={8} flex={1} minHeight={"90dvh"}>
           <Flex
             direction={"column"}
-            my={{ base: 4, md: 8 }}
+            mb={{ base: 4, md: 8 }}
             gap={{ base: 2, md: 4 }}
           >
             <Heading size={{ base: "lg", md: "xl" }}>{project.title}</Heading>
@@ -119,9 +119,11 @@ const Project = () => {
                 className="mySwiper"
               >
                 {project.images.map((url, idx) => (
-                  <SwiperSlide key={idx}>
+                  <SwiperSlide style={{ background: "gray" }} key={idx}>
                     <Image
-                      width={{ base: "100%", md: "3/4", lg: "1/2" }}
+                      // width={{ base: "100%", md: "3/4", lg: "1/2" }}
+                      objectFit={"contain"}
+                      objectPosition={"center"}
                       src={url}
                       alt={project.title}
                       aspectRatio={4 / 3}

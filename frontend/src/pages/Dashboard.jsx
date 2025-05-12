@@ -1,12 +1,14 @@
-import React from 'react'
+import React from "react";
+import { Navbar, Footer } from "@/components";
 
 const Dashboard = () => {
   return (
     <>
-    <title>Dashboard: Vizport;</title>
-    <div>Dashboard</div>
+      <Navbar/>
+      <h1>Dashboard</h1>
+      <Footer/>
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

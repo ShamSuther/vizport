@@ -4,7 +4,7 @@ export const formSchema = z.object({
   title: z
     .string()
     .nonempty("Project title is required!")
-    .min(10, "Title must be at least 10 characters"),
+    .min(5, "Title must be at least 5 characters"),
 
   description: z
     .string()

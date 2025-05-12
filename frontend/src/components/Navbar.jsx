@@ -5,7 +5,7 @@ import { useClerk } from "@clerk/clerk-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { signOut, openUserProfile, user, openSignIn } = useClerk();
+  const { signOut, openUserProfile, isSignedIn, openSignIn } = useClerk();
 
   const navLinks = [
     {
@@ -16,28 +16,28 @@ const Navbar = () => {
     {
       text: "DASHBOARD",
       action: () => navigate("/dashboard"),
-      show: user ? true : false,
+      show: isSignedIn ? true : false,
     },
     {
       text: "CREATE",
       action: () => navigate("/editor"),
-      show: user ? true : false,
+      show: isSignedIn ? true : false,
     },
     {
       text: "PROFILE",
       action: () => openUserProfile(),
-      show: user ? true : false,
+      show: isSignedIn ? true : false,
     },
     {
       text: "LOGIN",
       action: () => openSignIn(),
-      show: user ? false : true,
+      show: isSignedIn ? false : true,
     },
     {
       text: "LOGOUT",
       action: () => signOut({ redirectUrl: "/" }),
-      show: user ? true : false,
-    }
+      show: isSignedIn ? true : false,
+    },
   ];
 
   return (

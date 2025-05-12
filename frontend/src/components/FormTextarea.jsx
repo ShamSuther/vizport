@@ -22,7 +22,7 @@ export default function FormTextArea({ id, form, fieldName, fieldConfig }) {
         rounded={"lg"}
         resize={"none"}
         maxLength={1300}
-        height={{ base: "3rem", md: "6rem" }}
+        height={{ base: "6rem" }}
         onChange={field.onChange}
         onBlur={field.onBlur}
         value={field.value}

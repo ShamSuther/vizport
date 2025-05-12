@@ -85,7 +85,7 @@ const Projects = () => {
                 <Image
                   className="card-img"
                   width={400}
-                  height={{ base: 120, md: 300 }}
+                  height={{ base: 200, md: 300 }}
                   aspectRatio={4 / 3}
                   rounded={{ base: "lg", md: "3xl" }}
                   src={images[0]}
