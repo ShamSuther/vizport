@@ -20,15 +20,11 @@ router.post("/", requireClerkAuth, upload.array("images", 5), async (req, resp) 
 
         const userId = req.auth.userId;
 
-        console.log(userId);
-
         // Ensure user exists in DB
         const user = await User.findOne({ clerkId: userId });
         if (!user) {
             return resp.status(404).json({ message: "User not found" });
         }
-
-        console.log(user);
 
         // Basic validation
         if (!title || !description) {
@@ -82,7 +78,7 @@ router.get("/", async (req, resp) => {
 router.get("/:id", async (req, res) => {
     try {
         const excluded = "-__v -_id";
-        const project = await Project.findById(req.params.id).select(excluded);
+        const project = await Project.findById(req.params.id).populate({ path: "userId", select: "-__v" }).select(excluded).exec();
         if (!project) return res.status(404).json({ message: "Project not found" });
 
         // Public or owner access only
@@ -145,21 +141,27 @@ router.get("/public/all", async (req, res) => {
     }
 });
 
-// Search public projects
-// router.get("/public/search", async (req, res) => {
-//     try {
-//         const query = req.query.q || "";
-//         const regex = new RegExp(query, "i");
+// user projects
+router.get("/user/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const excluded = "-__v -description -technologies";
 
-//         const projects = await Project.find({
-//             isPublished: true,
-//             $or: [{ title: regex }, { technologies: regex }],
-//         });
+        const projects = await Project.find({ userId })
+            .populate({ path: "userId", select: "-__v" })
+            .select(excluded)
+            .exec();
 
-//         res.json(projects);
-//     } catch (err) {
-//         res.status(500).json({ message: "Search failed" });
-//     }
-// });
+        if (projects && projects.length > 0) {
+            return res.json(projects);
+        }
+
+        return res.status(404).json({ message: "No projects found for this user!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message || "Failed to fetch user projects" });
+    }
+});
+
 
 module.exports = router;

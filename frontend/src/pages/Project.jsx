@@ -13,6 +13,9 @@ import {
   Center,
   Box,
   Spinner,
+  Card,
+  Avatar,
+  HStack,
 } from "@chakra-ui/react";
 import { Footer, Navbar } from "@/components";
 import { Github, House, ArrowUpRight } from "lucide-react";
@@ -25,7 +28,7 @@ import "swiper/css/navigation";
 
 const Project = () => {
   const { id } = useParams();
-  const [project, setProject] = useState(null);
+  const [projekt, setProject] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -66,8 +69,8 @@ const Project = () => {
   }, [id]);
 
   useEffect(() => {
-    console.log(project);
-  }, [project]);
+    console.log(projekt);
+  }, [projekt]);
 
   if (loading) {
     return (
@@ -79,23 +82,24 @@ const Project = () => {
     );
   }
 
-  if (project != null) {
+  if (projekt != null) {
     return (
       <>
         <title>Project: Vizport;</title>
         <Navbar />
-        <Container p={8} px={8} flex={1} minHeight={"90dvh"}>
+        <Container p={8} px={8} flex={1} minHeight={"90dvh"} centerContent>
           <Flex
+            w={"100%"}
             direction={"column"}
             mb={{ base: 4, md: 8 }}
             gap={{ base: 2, md: 4 }}
           >
-            <Heading size={{ base: "lg", md: "xl" }}>{project.title}</Heading>
+            <Heading size={{ base: "lg", md: "xl" }}>{projekt.title}</Heading>
             <Stack direction={"row"} gap={4}>
               <Link
                 textStyle={{ base: "sm", md: "md" }}
                 variant="underline"
-                href={project.githubLink}
+                href={projekt.githubLink}
                 color={{ _hover: "orange.500" }}
                 transition={"all 150ms ease-in"}
               >
@@ -104,7 +108,7 @@ const Project = () => {
               <Link
                 textStyle={{ base: "sm", md: "md" }}
                 variant="underline"
-                href={project.liveLink}
+                href={projekt.liveLink}
                 color={{ _hover: "orange.500" }}
                 transition={"all 150ms ease-in"}
               >
@@ -112,20 +116,45 @@ const Project = () => {
               </Link>
             </Stack>
 
-            {project.images && project.images.length > 1 ? (
+            {projekt.images && projekt.images.length > 1 ? (
               <Swiper
                 navigation={true}
                 modules={[Navigation]}
                 className="mySwiper"
+                breakpoints={{
+                  320: {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                  },
+                  480: {
+                    slidesPerView: 1,
+                    spaceBetween: 15,
+                  },
+                  640: {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                  },
+                  768: {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                  },
+                  1024: {
+                    slidesPerView: 1,
+                    spaceBetween: 40,
+                  },
+                  1280: {
+                    slidesPerView: 1,
+                    spaceBetween: 50,
+                  },
+                }}
               >
-                {project.images.map((url, idx) => (
+                {projekt.images.map((url, idx) => (
                   <SwiperSlide style={{ background: "gray" }} key={idx}>
                     <Image
-                      // width={{ base: "100%", md: "3/4", lg: "1/2" }}
                       objectFit={"contain"}
                       objectPosition={"center"}
                       src={url}
-                      alt={project.title}
+                      alt={projekt.title}
                       aspectRatio={4 / 3}
                     />
                   </SwiperSlide>
@@ -134,10 +163,10 @@ const Project = () => {
             ) : (
               <Image
                 width={{ base: "100%", md: "3/4", lg: "1/2" }}
-                src={project.images[0]}
+                src={projekt.images[0]}
                 objectFit={"contain"}
                 objectPosition={"center"}
-                alt={project.title}
+                alt={projekt.title}
                 aspectRatio={4 / 3}
               />
             )}
@@ -146,14 +175,14 @@ const Project = () => {
               textStyle={{ base: "sm", md: "md" }}
               maxWidth={{ base: "100%", md: "3/4", lg: "8/12" }}
             >
-              {project.description}
+              {projekt.description}
             </Text>
             <Stack
               direction={"row"}
               maxW={{ base: "100%", md: "1/2" }}
               wrap={"wrap"}
             >
-              {project.technologies.map((tech, idx) => (
+              {projekt.technologies.map((tech, idx) => (
                 <Badge
                   variant={"surface"}
                   key={`tech-${idx}`}
@@ -167,12 +196,38 @@ const Project = () => {
                 </Badge>
               ))}
             </Stack>
+            {/* account */}
+            <Card.Root
+              p={4}
+              mt={4}
+              flex={0.5}
+              cursor={"pointer"}
+              rounded={{ base: "xl" }}
+              width={{ base: "100%", md: "320px" }}
+              variant={"elevated"}
+            >
+              <Card.Body gap="2">
+                <HStack key={projekt.userId.email} gap="4">
+                  <Avatar.Root>
+                    <Avatar.Fallback name={projekt.userId.username} />
+                    <Avatar.Image src={projekt.userId.imageUrl} />
+                  </Avatar.Root>
+                  <Stack gap="0">
+                    <Text fontWeight="medium">{projekt.userId.username}</Text>
+                    <Text color="fg.muted" textStyle="sm">
+                      {projekt.userId.email}
+                    </Text>
+                  </Stack>
+                </HStack>
+              </Card.Body>
+            </Card.Root>
           </Flex>
         </Container>
         <Footer />
       </>
     );
   }
+
   return (
     <Center height={"100dvh"}>
       <Container p={"4"} px={"8"}>

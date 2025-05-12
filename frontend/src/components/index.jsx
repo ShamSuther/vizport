@@ -10,6 +10,7 @@ import FormTextArea from "./FormTextarea";
 import FormCheckbox from "./FormCheckbox";
 import FormDropzone from "./FormDropdone";
 import FormSelect from "./FormSelect";
+import ProjectTable from "./ProjectTable";
 
 export {
   Hero,
@@ -24,4 +25,5 @@ export {
   FormCheckbox,
   FormDropzone,
   FormSelect,
+  ProjectTable,
 };

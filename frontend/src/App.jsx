@@ -85,33 +85,6 @@ const AnimateRoutes = () => {
 
 // main
 function App() {
-  const { getToken } = useAuth();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = await getToken();
-        const response = await fetch("http://localhost:5050/api/user/sync", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        let result;
-        if (response.ok && response.status == 200) {
-          result = await response.json();
-          console.log(result);
-        } else if (response.status == 500) {
-          result = await response.json();
-          console.log(result);
-        }
-      } catch (error) {
-        console.error("Error checking auth:", error);
-      }
-    };
-
-    fetchData();
-  }, [getToken]);
-
   return (
     <Router>
       <AnimateRoutes />

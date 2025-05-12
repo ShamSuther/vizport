@@ -20,7 +20,7 @@ router.post("/sync", requireClerkAuth, async (req, resp) => {
             const username = clerkUser.username || fullName || clerkUser.firstName || "Unknown";
 
             // Check if user already exists in MongoDB
-            let user = await User.findOne({ clerkId: clerkUserId }).select("-__v -_id");
+            let user = await User.findOne({ clerkId: clerkUserId }).select("-__v");
 
             if (!user) {
                 user = new User({
