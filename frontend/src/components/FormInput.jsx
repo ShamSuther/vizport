@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useController } from "react-hook-form";
+import PresenceWrapper from "./Presence";
 
 export default function FormInput({ id, form, fieldName, fieldConfig, addon }) {
   const { open, setOpen } = useDisclosure();
@@ -66,7 +67,7 @@ export default function FormInput({ id, form, fieldName, fieldConfig, addon }) {
         py={1}
         px={3}
         ref={field.ref}
-        rounded={"md"}
+        rounded={"lg"}
         onChange={field.onChange}
         onBlur={(e) => {
           let value = e.target.value;
@@ -82,13 +83,9 @@ export default function FormInput({ id, form, fieldName, fieldConfig, addon }) {
         transition={"all 150ms ease-in-out"}
         type={type}
       />
-      <Presence
-        present={open}
-        animationName={{ _open: "fade-in", _closed: "fade-out" }}
-        animationDuration="moderate"
-      >
+      <PresenceWrapper>
         <Field.ErrorText>{error?.message}</Field.ErrorText>
-      </Presence>
+      </PresenceWrapper>
     </Field.Root>
   );
 }

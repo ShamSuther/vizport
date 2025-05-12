@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, VStack } from "@chakra-ui/react";
+import {
+  Card,
+  VStack,
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
 import { inputs, initials } from "@/constants";
 import { formSchema } from "@/schemas/formSchema";
 import {
@@ -14,6 +22,7 @@ import {
 import { toaster } from "@/components/ui/toaster";
 import { Footer, Navbar } from "@/components";
 import { useAuth } from "@clerk/clerk-react";
+import Btn from "@/components/Btn";
 
 const Editor = () => {
   const { getToken } = useAuth();
@@ -29,24 +38,24 @@ const Editor = () => {
   } = form;
 
   useEffect(() => {
-    if (!Object.keys(errors).length) return;
+    // if (!Object.keys(errors).length) return;
 
-    const toastErrors = () => {
-      Object.entries(errors).forEach(([key, value]) => {
-        toaster.create({
-          duration: 2500,
-          title: key.charAt(0).toUpperCase() + key.slice(1),
-          description: value?.message,
-          type: "info",
-        });
-      });
-    };
+    // const toastErrors = () => {
+    //   Object.entries(errors).forEach(([key, value]) => {
+    //     toaster.create({
+    //       duration: 2500,
+    //       title: key.charAt(0).toUpperCase() + key.slice(1),
+    //       description: value?.message,
+    //       type: "info",
+    //     });
+    //   });
+    // };
 
-    const microtask = setTimeout(toastErrors, 0);
+    // const microtask = setTimeout(toastErrors, 0);
     const clearTimer = setTimeout(clearErrors, 3000);
 
     return () => {
-      clearTimeout(microtask);
+      // clearTimeout(microtask);
       clearTimeout(clearTimer);
     };
   }, [errors, clearErrors]);
@@ -124,14 +133,52 @@ const Editor = () => {
   return (
     <div>
       <Navbar />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack gap={4}>
-          {inputs.map((field, idx) => renderField(field, idx))}
-        </VStack>
-        <Button type="submit" mt={4}>
-          Submit
-        </Button>
-      </form>
+      <Container minHeight={"100dvh"} py={"6rem"} px={{ base: 0, md: 8 }}>
+        <Flex
+          height={"100%"}
+          direction={{ base: "column", md: "row" }}
+          justifyContent={"space-evenly"}
+        >
+          <Flex
+            p={4}
+            height={"auto"}
+            justifyContent="center"
+            textAlign={{ base: "center", md: "left" }}
+            mt={12}
+          >
+            <Heading
+              size={{ base: "2xl", md: "4xl" }}
+              wordBreak="break-word"
+              maxW="sm"
+            >
+              Create new project
+            </Heading>
+          </Flex>
+
+          {/* Form Section */}
+          <Card.Root
+            maxW="lg"
+            width="100%"
+            rounded="2xl"
+            p={{ base: 8 }}
+            variant="elevated"
+            px={{ base: 4, md: 8 }}
+            flex={{ base: "none", md: 1 }}
+            unstyled={true}
+          >
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Card.Body>
+                <VStack gap={4} alignItems="flex-start">
+                  {inputs.map((field, idx) => renderField(field, idx))}
+                </VStack>
+              </Card.Body>
+              <Card.Footer mt={4}>
+                <Btn content="Submit" type="submit" />
+              </Card.Footer>
+            </form>
+          </Card.Root>
+        </Flex>
+      </Container>
       <Footer />
     </div>
   );

@@ -19,7 +19,7 @@ export default function FormTextArea({ id, form, fieldName, fieldConfig }) {
         py={2}
         px={3}
         ref={field.ref}
-        rounded={"md"}
+        rounded={"lg"}
         resize={"none"}
         maxLength={1300}
         height={{ base: "3rem", md: "6rem" }}

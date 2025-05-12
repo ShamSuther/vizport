@@ -9,16 +9,13 @@ const Showcase = () => {
         <Flex
           style={{
             direction: "row",
-            justifyContent: "space-between",
+            justifyContent: "center",
             alignItems: "center",
           }}
-          mb={"4"}
+          mb={{base:4,md:8}}
         >
           <Heading size="lg" color={"gray.300"}>
-            Project
-          </Heading>
-          <Heading size="lg" color={"gray.300"}>
-            Showcase
+            Project Showcase
           </Heading>
         </Flex>
         <Projects />

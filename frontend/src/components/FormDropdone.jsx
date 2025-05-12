@@ -34,13 +34,13 @@ export default function FormDropzone({ id, form, fieldName, fieldConfig }){
         accept={["image/*"]}
         value={field.value || []}
         onFileAccept={handleFileAccept}
-        maxW="xl"
+        // maxW="xl"
         alignItems="stretch"
         maxFiles={5}
         maxFileSize={5000000} // 5MB
       >
         <FileUpload.HiddenInput />
-        <FileUpload.Dropzone>
+        <FileUpload.Dropzone rounded={"lg"}>
           <Icon size="md" color="fg.muted">
             <Upload />
           </Icon>

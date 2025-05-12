@@ -7,15 +7,16 @@ import {
   Flex,
   Button,
   Center,
+  Highlight,
 } from "@chakra-ui/react";
 import { ArrowRight } from "lucide-react";
-import HeroBtn from "./HeroBtn";
+import Btn from "./Btn";
 
 const Hero = () => {
   return (
     <>
-      <Center minHeight={"80dvh"}>
-        <Container>
+      <Center className="hero-section" minHeight={"80dvh"}>
+        <Container zIndex={1}>
           <Box>
             <Flex direction={"column"} alignItems={"center"} gap={"2"}>
               <Text
@@ -30,13 +31,17 @@ const Hero = () => {
               </Text>
               <Heading
                 className="limelight-regular"
-                textStyle={{ base: "6xl", md: "7xl" }}
+                textStyle={{ base: "5xl", md: "6xl" }}
                 fontWeight={"medium"}
                 transition="all 150ms ease-in-out"
               >
                 Vizport
               </Heading>
-              <HeroBtn content={"Get started now"} icon={<ArrowRight />} />
+              <Btn
+                content={"Get started now"}
+                type={"button"}
+                icon={<ArrowRight />}
+              />
             </Flex>
           </Box>
         </Container>

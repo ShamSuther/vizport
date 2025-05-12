@@ -1,10 +1,11 @@
 import React from "react";
 import { Button } from "@chakra-ui/react";
 
-const HeroBtn = ({ content, icon, onClick }) => {
+const Btn = ({ content, type, icon, onClick }) => {
   return (
     <Button
       p={"4"}
+      type={type}
       rounded="xl"
       variant={"outline"}
       borderWidth={"2px"}
@@ -17,9 +18,9 @@ const HeroBtn = ({ content, icon, onClick }) => {
       transition="all 150ms ease-in-out"
       onClick={onClick}
     >
-      {content} {icon}
+      {content} {icon && icon}
     </Button>
   );
 };
 
-export default HeroBtn;
+export default Btn;

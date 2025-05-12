@@ -65,7 +65,7 @@ const Projects = () => {
   if (projects.length > 0) {
     return (
       <Grid
-        templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(2, 1fr)" }}
+        templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
         gap={{ base: 3, md: 6 }}
       >
         {projects.map((projekt, idx) => {
@@ -89,6 +89,7 @@ const Projects = () => {
                   aspectRatio={4 / 3}
                   rounded={{ base: "lg", md: "3xl" }}
                   src={images[0]}
+                  borderWidth={2}
                   alt={key}
                 />
                 <Card.Body

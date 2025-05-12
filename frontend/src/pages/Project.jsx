@@ -84,8 +84,12 @@ const Project = () => {
       <>
         <title>Project: Vizport;</title>
         <Navbar />
-        <Container p={"8"} px={"8"} flex={1} minHeight={"90dvh"}>
-          <Flex direction={"column"} gap={{ base: 2, md: 4 }}>
+        <Container p={8} px={8} flex={1} minHeight={"90dvh"}>
+          <Flex
+            direction={"column"}
+            my={{ base: 4, md: 8 }}
+            gap={{ base: 2, md: 4 }}
+          >
             <Heading size={{ base: "lg", md: "xl" }}>{project.title}</Heading>
             <Stack direction={"row"} gap={4}>
               <Link
@@ -129,6 +133,8 @@ const Project = () => {
               <Image
                 width={{ base: "100%", md: "3/4", lg: "1/2" }}
                 src={project.images[0]}
+                objectFit={"contain"}
+                objectPosition={"center"}
                 alt={project.title}
                 aspectRatio={4 / 3}
               />

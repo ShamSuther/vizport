@@ -9,7 +9,7 @@ import {
   Center,
   Link,
 } from "@chakra-ui/react";
-import HeroBtn from "@/components/HeroBtn";
+import HeroBtn from "@/components/Btn";
 import { House } from "lucide-react";
 import { useNavigate } from "react-router";
 

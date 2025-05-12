@@ -15,6 +15,7 @@ export default function FormCheckbox({ id, form, fieldName, fieldConfig }) {
   return (
     <Field.Root key={id} invalid={error ? true : false}>
       <Checkbox.Root
+        variant={"subtle"}
         checked={field.value}
         onCheckedChange={({ checked }) => field.onChange(checked)}
       >
@@ -22,16 +23,6 @@ export default function FormCheckbox({ id, form, fieldName, fieldConfig }) {
         <Checkbox.Control />
         <Checkbox.Label>{label}</Checkbox.Label>
       </Checkbox.Root>
-      {/* <Textarea
-        ref={field.ref}
-        resize={"none"}
-        onChange={field.onChange}
-        onBlur={field.onBlur}
-        value={field.value}
-        name={field.name}
-        placeholder={placeholder}
-        type={type}
-      /> */}
       <Field.ErrorText>{error?.message}</Field.ErrorText>
     </Field.Root>
   );

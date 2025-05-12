@@ -37,7 +37,7 @@ const Navbar = () => {
       text: "LOGOUT",
       action: () => signOut({ redirectUrl: "/" }),
       show: user ? true : false,
-    },
+    }
   ];
 
   return (
@@ -67,50 +67,6 @@ const Navbar = () => {
               );
             }
           })}
-          {/* <Button
-            textStyle={{ base: "sm", md: "md" }}
-            color={{ _hover: "orange.500" }}
-            variant="plain"
-            gap={".25rem"}
-            p={0}
-            onClick={() => openUserProfile()}
-          >
-            HOME
-            <Slash size={14} strokeWidth={2} />
-          </Button>
-          <Button
-            textStyle={{ base: "sm", md: "md" }}
-            color={{ _hover: "orange.500" }}
-            variant="plain"
-            gap={".25rem"}
-            p={0}
-            onClick={() => openUserProfile()}
-          >
-            DASHBOARD
-            <ArrowDownLeft size={14} strokeWidth={2} />
-          </Button>
-          <Button
-            textStyle={{ base: "sm", md: "md" }}
-            color={{ _hover: "orange.500" }}
-            variant="plain"
-            gap={".25rem"}
-            p={0}
-            onClick={() => openUserProfile()}
-          >
-            PROFILE
-            <ArrowDownLeft size={14} strokeWidth={2} />
-          </Button>
-          <Button
-            textStyle={{ base: "sm", md: "md" }}
-            color={{ _hover: "orange.500" }}
-            variant="plain"
-            gap={".25rem"}
-            p={0}
-            onClick={() => signOut({ redirectUrl: "/" })}
-          >
-            LEAVE
-            <ArrowDownLeft size={14} strokeWidth={2} />
-          </Button> */}
         </Flex>
       </Center>
     </Box>
